@@ -1,5 +1,7 @@
 from typing import List
-from products import Product
+
+from bestbuy.promotions import SecondHalfPrice, ThirdOneFree, PercentDiscount
+from products import Product, NonStockedProduct, LimitedProduct
 
 
 class Store:
@@ -46,10 +48,29 @@ class Store:
 
 
 def main():
-    product_list = [Product("MacBook Air M2", price=1450, quantity=100),
-                    Product("Bose QuietComfort Earbuds", price=250, quantity=500),
-                    Product("Google Pixel 7", price=500, quantity=250),
-                    ]
+    product_list = [
+        Product("MacBook Air M2", price=1450, quantity=100),
+        Product("Bose QuietComfort Earbuds", price=250, quantity=500),
+        Product("Google Pixel 7", price=500, quantity=250),
+        NonStockedProduct("Windows License", price=125),
+        LimitedProduct("Shipping", price=10, quantity=250, maximum=1)
+    ]
+
+    second_half_price = SecondHalfPrice("Second Half price!")
+    third_one_free = ThirdOneFree("Third One Free!")
+    thirty_percent = PercentDiscount("30% off!", percent=30)
+
+    product_list[0].set_promotion(second_half_price)
+    product_list[1].set_promotion(third_one_free)
+    product_list[3].set_promotion(thirty_percent)
+
+    for product in product_list:
+        print(product.show())
+
+    # Test buy with promotions
+    print(product_list[0].buy(3))
+    print(product_list[1].buy(4))
+    print(product_list[3].buy(2))
 
     store = Store(product_list)
     products = store.get_all_products()
